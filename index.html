@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Universal Gravitation with Phaser</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    const config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      backgroundColor: '#1e1e1e',
+      physics: {
+        default: 'arcade'
+      },
+      scene: {
+        preload,
+        create,
+        update
+      }
+    };
+
+    const G = 6.67430e-4;
+    let sun, planet;
+    let trail = [];
+    let graphics;
+
+    const game = new Phaser.Game(config);
+
+    function preload() {
+      this.load.image('sun', 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sun_symbol.svg/64px-Sun_symbol.svg.png');
+      this.load.image('planet', 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Blue_circle_100%25.svg/50px-Blue_circle_100%25.svg.png');
+    }
+
+    function create() {
+      graphics = this.add.graphics();
+
+      sun = this.add.image(400, 300, 'sun');
+      sun.setDisplaySize(40, 40);
+      sun.mass = 2000;
+
+      planet = this.add.image(600, 300, 'planet');
+      planet.setDisplaySize(32, 32);
+      planet.mass = 1;
+      planet.vx = 0;
+      planet.vy = -2.0;
+    }
+
+    function update() {
+      const dx = sun.x - planet.x;
+      const dy = sun.y - planet.y;
+      const distSq = dx * dx + dy * dy;
+      const dist = Math.sqrt(distSq);
+
+      const force = (G * sun.mass * planet.mass) / distSq;
+      const ax = force * dx / dist / planet.mass;
+      const ay = force * dy / dist / planet.mass;
+
+      planet.vx += ax;
+      planet.vy += ay;
+
+      planet.x += planet.vx;
+      planet.y += planet.vy;
+
+      trail.push({ x: planet.x, y: planet.y });
+      if (trail.length > 500) trail.shift();
+
+      drawTrail();
+    }
+
+    function drawTrail() {
+      graphics.clear();
+      graphics.lineStyle(1, 0x00ffff, 0.3);
+      graphics.beginPath();
+      for (let i = 0; i < trail.length; i++) {
+        const p = trail[i];
+        if (i === 0) graphics.moveTo(p.x, p.y);
+        else graphics.lineTo(p.x, p.y);
+      }
+      graphics.strokePath();
+    }
+  </script>
+</body>
+</html>
