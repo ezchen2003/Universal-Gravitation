@@ -47,6 +47,11 @@
     function preload() {}
 
     function create() {
+      this.minimap = this.cameras.add(600, 10, 190, 190).setZoom(0.05).setName('mini');
+      this.minimap.setBackgroundColor(0x000000);
+      this.minimap.setBounds(-1000, -1000, 3000, 3000);
+      this.minimap.scrollX = -1000;
+      this.minimap.scrollY = -1000;
       // Add quadrant objects and border visual
       const border = this.add.rectangle(500, 500, 3000, 3000).setStrokeStyle(4, 0xffffff, 0.5);
       border.setOrigin(0);
@@ -99,6 +104,12 @@
       }).setOrigin(0.5);
 
       spaceshipLabel = this.add.text(spaceship.x, spaceship.y - 30, 'Spaceship', {
+        font: '16px Arial',
+        fill: '#ff00ff',
+        align: 'center'
+      }).setOrigin(0.5);
+
+      this.minimap.ignore(this.coordText);
         font: '16px Arial',
         fill: '#ff00ff',
         align: 'center'
