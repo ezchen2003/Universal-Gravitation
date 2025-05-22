@@ -21,9 +21,6 @@
       width: 800,
       height: 600,
       backgroundColor: '#1e1e1e',
-      physics: {
-        default: 'arcade'
-      },
       scene: {
         preload,
         create,
@@ -35,26 +32,37 @@
     let sun, planet;
     let trail = [];
     let graphics;
+    let sunLabel, planetLabel;
 
     const game = new Phaser.Game(config);
 
-    function preload() {
-      this.load.image('sun', 'https://kenney.nl/assets/space-kit/icons/yellow-planet.png');
-      this.load.image('planet', 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Blue_circle_100%25.svg/50px-Blue_circle_100%25.svg.png');
-    }
+    function preload() {}
 
     function create() {
       graphics = this.add.graphics();
 
-      sun = this.add.image(400, 300, 'sun');
-      sun.setDisplaySize(40, 40);
+      // Draw sun as a circle
+      sun = this.add.circle(400, 300, 20, 0xffff00);
       sun.mass = 2000;
 
-      planet = this.add.image(600, 300, 'planet');
-      planet.setDisplaySize(32, 32);
+      // Draw planet as a circle
+      planet = this.add.circle(600, 300, 16, 0x00aaff);
       planet.mass = 1;
       planet.vx = 0;
       planet.vy = -2.0;
+
+      // Add name labels like Agar.io
+      sunLabel = this.add.text(sun.x, sun.y - 30, 'Sun', {
+        font: '16px Arial',
+        fill: '#ffff00',
+        align: 'center'
+      }).setOrigin(0.5);
+
+      planetLabel = this.add.text(planet.x, planet.y - 30, 'Planet', {
+        font: '16px Arial',
+        fill: '#00aaff',
+        align: 'center'
+      }).setOrigin(0.5);
     }
 
     function update() {
@@ -72,6 +80,9 @@
 
       planet.x += planet.vx;
       planet.y += planet.vy;
+
+      // Update label positions
+      planetLabel.setPosition(planet.x, planet.y - 30);
 
       trail.push({ x: planet.x, y: planet.y });
       if (trail.length > 500) trail.shift();
