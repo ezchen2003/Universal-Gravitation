@@ -29,10 +29,10 @@
     };
 
     const G = 6.67430e-4;
-    let sun, planet;
+    let sun, planet, spaceship;
     let trail = [];
     let graphics;
-    let sunLabel, planetLabel;
+    let sunLabel, planetLabel, spaceshipLabel;
 
     const game = new Phaser.Game(config);
 
@@ -41,17 +41,19 @@
     function create() {
       graphics = this.add.graphics();
 
-      // Draw sun as a circle
       sun = this.add.circle(400, 300, 20, 0xffff00);
       sun.mass = 2000;
 
-      // Draw planet as a circle
       planet = this.add.circle(600, 300, 16, 0x00aaff);
       planet.mass = 1;
       planet.vx = 0;
       planet.vy = -2.0;
 
-      // Add name labels like Agar.io
+      spaceship = this.add.circle(300, 100, 10, 0xff00ff);
+      spaceship.mass = 0.5;
+      spaceship.vx = 1.2;
+      spaceship.vy = 0.5;
+
       sunLabel = this.add.text(sun.x, sun.y - 30, 'Sun', {
         font: '16px Arial',
         fill: '#ffff00',
@@ -63,31 +65,45 @@
         fill: '#00aaff',
         align: 'center'
       }).setOrigin(0.5);
+
+      spaceshipLabel = this.add.text(spaceship.x, spaceship.y - 30, 'Spaceship', {
+        font: '16px Arial',
+        fill: '#ff00ff',
+        align: 'center'
+      }).setOrigin(0.5);
     }
 
     function update() {
-      const dx = sun.x - planet.x;
-      const dy = sun.y - planet.y;
-      const distSq = dx * dx + dy * dy;
-      const dist = Math.sqrt(distSq);
-
-      const force = (G * sun.mass * planet.mass) / distSq;
-      const ax = force * dx / dist / planet.mass;
-      const ay = force * dy / dist / planet.mass;
-
-      planet.vx += ax;
-      planet.vy += ay;
+      applyGravity(sun, planet);
+      applyGravity(sun, spaceship);
+      applyGravity(planet, spaceship);
 
       planet.x += planet.vx;
       planet.y += planet.vy;
 
-      // Update label positions
+      spaceship.x += spaceship.vx;
+      spaceship.y += spaceship.vy;
+
       planetLabel.setPosition(planet.x, planet.y - 30);
+      spaceshipLabel.setPosition(spaceship.x, spaceship.y - 30);
 
       trail.push({ x: planet.x, y: planet.y });
       if (trail.length > 500) trail.shift();
 
       drawTrail();
+    }
+
+    function applyGravity(bodyA, bodyB) {
+      const dx = bodyA.x - bodyB.x;
+      const dy = bodyA.y - bodyB.y;
+      const distSq = dx * dx + dy * dy;
+      const dist = Math.sqrt(distSq);
+      if (dist < 1) return;
+      const force = (G * bodyA.mass * bodyB.mass) / distSq;
+      const ax = force * dx / dist / bodyB.mass;
+      const ay = force * dy / dist / bodyB.mass;
+      bodyB.vx += ax;
+      bodyB.vy += ay;
     }
 
     function drawTrail() {
