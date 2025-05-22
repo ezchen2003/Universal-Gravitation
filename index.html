@@ -40,8 +40,6 @@
     function preload() {}
 
     function create() {
-      this.cameras.main.startFollow(spaceship, true, 0.1, 0.1);
-      this.cameras.main.setZoom(1);
       graphics = this.add.graphics();
       cursors = this.input.keyboard.createCursorKeys();
 
@@ -57,6 +55,9 @@
       spaceship.mass = 0.5;
       spaceship.vx = 1.2;
       spaceship.vy = 0.5;
+
+      this.cameras.main.startFollow(spaceship, true, 0.1, 0.1);
+      this.cameras.main.setZoom(1);
 
       sunLabel = this.add.text(sun.x, sun.y - 30, 'Sun', {
         font: '16px Arial',
