@@ -37,6 +37,7 @@
 
     const G = 3e-1;
     let sun, planet, spaceship;
+    let solarSystems = [];
     let trail = [];
     let graphics;
     let sunLabel, planetLabel, spaceshipLabel;
@@ -72,13 +73,36 @@
       graphics = this.add.graphics();
       cursors = this.input.keyboard.createCursorKeys();
 
-      sun = this.add.circle(400, 300, 20, 0xffff00);
-      sun.mass = 2000;
+      const baseSystems = [
+        { x: 400, y: 300 },
+        { x: -700, y: -700 },
+        { x: 1700, y: -700 },
+        { x: -700, y: 1700 },
+        { x: 1700, y: 1700 }
+      ];
 
-      planet = this.add.circle(600, 300, 16, 0x00aaff);
-      planet.mass = 100;
-      planet.vx = 0;
-      planet.vy = -2.0;
+      for (const { x, y } of baseSystems) {
+        const s = this.add.circle(x, y, 20, 0xffff00);
+        s.mass = 2000;
+
+        const p = this.add.circle(x + 200, y, 16, 0x00aaff);
+        p.mass = 100;
+        p.vx = 0;
+        p.vy = -2.0;
+
+        const sl = this.add.text(x, y - 30, 'Sun', {
+          font: '16px Arial', fill: '#ffff00', align: 'center'
+        }).setOrigin(0.5);
+
+        const pl = this.add.text(p.x, p.y - 30, 'Planet', {
+          font: '16px Arial', fill: '#00aaff', align: 'center'
+        }).setOrigin(0.5);
+
+        solarSystems.push({ sun: s, planet: p, sunLabel: sl, planetLabel: pl });
+      }
+
+      // Assign the central system to sun/planet for reference (e.g. trail)
+      ({ sun, planet } = solarSystems[0]);
 
       spaceship = this.add.circle(300, 100, 10, 0xff00ff);
       spaceship.setInteractive();
@@ -117,9 +141,11 @@
       this.coordText.setPosition(10, 10);
       graphics.clear();
       drawGrid();
-      applyGravity(sun, planet);
-      applyGravity(sun, spaceship);
-      applyGravity(planet, spaceship);
+      for (const sys of solarSystems) {
+        applyGravity(sys.sun, sys.planet);
+        applyGravity(sys.sun, spaceship);
+        applyGravity(sys.planet, spaceship);
+      }
 
       // Player controls for spaceship thrust
       const thrust = 0.05;
@@ -129,8 +155,11 @@
       if (cursors.up.isDown) { spaceship.vy -= thrust; flame = true; }
       if (cursors.down.isDown) { spaceship.vy += thrust; flame = true; }
 
-      planet.x += planet.vx;
-      planet.y += planet.vy;
+      for (const sys of solarSystems) {
+        sys.planet.x += sys.planet.vx;
+        sys.planet.y += sys.planet.vy;
+        sys.planetLabel.setPosition(sys.planet.x, sys.planet.y - 30);
+      }
 
       spaceship.x += spaceship.vx;
       spaceship.y += spaceship.vy;
