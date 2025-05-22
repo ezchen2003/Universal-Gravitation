@@ -76,16 +76,18 @@
     }
 
     function update() {
+      graphics.clear();
       applyGravity(sun, planet);
       applyGravity(sun, spaceship);
       applyGravity(planet, spaceship);
 
       // Player controls for spaceship thrust
       const thrust = 0.05;
-      if (cursors.left.isDown) spaceship.vx -= thrust;
-      if (cursors.right.isDown) spaceship.vx += thrust;
-      if (cursors.up.isDown) spaceship.vy -= thrust;
-      if (cursors.down.isDown) spaceship.vy += thrust;
+      let flame = false;
+            if (cursors.left.isDown) { spaceship.vx -= thrust; flame = true; }
+      if (cursors.right.isDown) { spaceship.vx += thrust; flame = true; }
+      if (cursors.up.isDown) { spaceship.vy -= thrust; flame = true; }
+      if (cursors.down.isDown) { spaceship.vy += thrust; flame = true; }
 
       planet.x += planet.vx;
       planet.y += planet.vy;
@@ -95,6 +97,17 @@
 
       planetLabel.setPosition(planet.x, planet.y - 30);
       spaceshipLabel.setPosition(spaceship.x, spaceship.y - 30);
+
+      // Draw flame trail
+      if (flame) {
+        graphics.fillStyle(0xff6600, 1);
+        graphics.beginPath();
+        graphics.moveTo(spaceship.x, spaceship.y);
+        graphics.lineTo(spaceship.x - spaceship.vx * 8 + 4, spaceship.y - spaceship.vy * 8 + 4);
+        graphics.lineTo(spaceship.x - spaceship.vx * 8 - 4, spaceship.y - spaceship.vy * 8 - 4);
+        graphics.closePath();
+        graphics.fillPath();
+      }
 
       trail.push({ x: planet.x, y: planet.y });
       if (trail.length > 500) trail.shift();
