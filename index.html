@@ -28,11 +28,12 @@
       }
     };
 
-    const G = 2e-1;
+    const G = 3e-1;
     let sun, planet, spaceship;
     let trail = [];
     let graphics;
     let sunLabel, planetLabel, spaceshipLabel;
+    let cursors;
 
     const game = new Phaser.Game(config);
 
@@ -40,12 +41,13 @@
 
     function create() {
       graphics = this.add.graphics();
+      cursors = this.input.keyboard.createCursorKeys();
 
       sun = this.add.circle(400, 300, 20, 0xffff00);
       sun.mass = 2000;
 
       planet = this.add.circle(600, 300, 16, 0x00aaff);
-      planet.mass = 1;
+      planet.mass = 100;
       planet.vx = 0;
       planet.vy = -2.0;
 
@@ -77,6 +79,13 @@
       applyGravity(sun, planet);
       applyGravity(sun, spaceship);
       applyGravity(planet, spaceship);
+
+      // Player controls for spaceship thrust
+      const thrust = 0.05;
+      if (cursors.left.isDown) spaceship.vx -= thrust;
+      if (cursors.right.isDown) spaceship.vx += thrust;
+      if (cursors.up.isDown) spaceship.vy -= thrust;
+      if (cursors.down.isDown) spaceship.vy += thrust;
 
       planet.x += planet.vx;
       planet.y += planet.vy;
