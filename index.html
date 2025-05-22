@@ -40,9 +40,6 @@
     function preload() {}
 
     function create() {
-      this.cameras.main.startFollow(spaceship, true, 0.1, 0.1);
-      this.cameras.main.setZoom(1);
-      graphics = this.add.graphics();
       graphics = this.add.graphics();
       cursors = this.input.keyboard.createCursorKeys();
 
@@ -135,28 +132,13 @@
 
     function drawGrid() {
       const gridSize = 50;
-      const cam = game.scene.scenes[0].cameras.main;
-      const topLeftX = cam.scrollX;
-      const topLeftY = cam.scrollY;
-      const bottomRightX = cam.scrollX + cam.width / cam.zoom;
-      const bottomRightY = cam.scrollY + cam.height / cam.zoom;
-
       graphics.lineStyle(1, 0x333333, 0.3);
-
-      for (let x = Math.floor(topLeftX / gridSize) * gridSize; x < bottomRightX; x += gridSize) {
+      for (let x = 0; x < config.width; x += gridSize) {
         graphics.beginPath();
-        graphics.moveTo(x, topLeftY);
-        graphics.lineTo(x, bottomRightY);
+        graphics.moveTo(x, 0);
+        graphics.lineTo(x, config.height);
         graphics.strokePath();
       }
-
-      for (let y = Math.floor(topLeftY / gridSize) * gridSize; y < bottomRightY; y += gridSize) {
-        graphics.beginPath();
-        graphics.moveTo(topLeftX, y);
-        graphics.lineTo(bottomRightX, y);
-        graphics.strokePath();
-      }
-    }
       for (let y = 0; y < config.height; y += gridSize) {
         graphics.beginPath();
         graphics.moveTo(0, y);
