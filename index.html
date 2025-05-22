@@ -48,8 +48,9 @@
 
     function create() {
       const worldSize = 3000;
-      this.cameras.main.setBounds(0, 0, worldSize, worldSize);
-      this.physics.world.setBounds(0, 0, worldSize, worldSize);
+      const worldOrigin = -1000;
+      this.cameras.main.setBounds(worldOrigin, worldOrigin, worldSize, worldSize);
+      this.physics.world.setBounds(worldOrigin, worldOrigin, worldSize, worldSize);
 
       graphics = this.add.graphics();
       cursors = this.input.keyboard.createCursorKeys();
