@@ -47,6 +47,18 @@
     function preload() {}
 
     function create() {
+      // Add quadrant objects and border visual
+      const border = this.add.rectangle(500, 500, 3000, 3000).setStrokeStyle(4, 0xffffff, 0.5);
+      border.setOrigin(0);
+      border.setPosition(-1000, -1000);
+
+      this.add.text(-900, -900, 'Top-Left', { font: '16px Arial', fill: '#aaa' });
+      this.add.text(1800, -900, 'Top-Right', { font: '16px Arial', fill: '#aaa' });
+      this.add.text(-900, 1800, 'Bottom-Left', { font: '16px Arial', fill: '#aaa' });
+      this.add.text(1800, 1800, 'Bottom-Right', { font: '16px Arial', fill: '#aaa' });
+
+      this.coordText = this.add.text(0, 0, '', { font: '14px Courier', fill: '#ffffff' }).setScrollFactor(0);
+
       const worldSize = 3000;
       const worldOrigin = -1000;
       this.cameras.main.setBounds(worldOrigin, worldOrigin, worldSize, worldSize);
@@ -94,6 +106,8 @@
     }
 
     function update() {
+      this.coordText.setText(`X: ${spaceship.x.toFixed(0)}, Y: ${spaceship.y.toFixed(0)}`);
+      this.coordText.setPosition(10, 10);
       graphics.clear();
       drawGrid();
       applyGravity(sun, planet);
@@ -155,7 +169,7 @@
       const bottomRightX = cam.scrollX + cam.width / cam.zoom;
       const bottomRightY = cam.scrollY + cam.height / cam.zoom;
 
-      graphics.lineStyle(1, 0x333333, 0.3);
+      graphics.lineStyle(1, 0x555555, 0.6);
 
       for (let x = Math.floor(topLeftX / gridSize) * gridSize; x < bottomRightX; x += gridSize) {
         graphics.beginPath();
