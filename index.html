@@ -17,6 +17,13 @@
 <body>
   <script>
     const config = {
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: { x: 0, y: 0 },
+          debug: false
+        }
+      },
       type: Phaser.AUTO,
       width: 800,
       height: 600,
@@ -40,6 +47,10 @@
     function preload() {}
 
     function create() {
+      const worldSize = 3000;
+      this.cameras.main.setBounds(0, 0, worldSize, worldSize);
+      this.physics.world.setBounds(0, 0, worldSize, worldSize);
+
       graphics = this.add.graphics();
       cursors = this.input.keyboard.createCursorKeys();
 
@@ -52,6 +63,9 @@
       planet.vy = -2.0;
 
       spaceship = this.add.circle(300, 100, 10, 0xff00ff);
+      spaceship.setInteractive();
+      this.physics.add.existing(spaceship);
+      spaceship.body.setCollideWorldBounds(true);
       spaceship.mass = 0.5;
       spaceship.vx = 1.2;
       spaceship.vy = 0.5;
