@@ -86,49 +86,47 @@
       const solarSystemData = [
         {
           x: 400, y: 300,
+          sun: { mass: 2000, color: 0xffff00 },
           planets: [
             { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff },
             { offsetX: 0, offsetY: 250, vx: 1.5, vy: 0, mass: 100, color: 0x00ddaa }
           ]
         },
-        {
-          x: -600, y: -600,
+        { x: -600, y: -600, sun: { mass: 1500, color: 0xffcc00 },
           planets: [
             { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
           ]
         },
-        {
-          x: 1600, y: -600,
+        { x: 1600, y: -600, sun: { mass: 1800, color: 0xffaa00 },
           planets: [
             { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
           ]
         },
-        {
-          x: -600, y: 1600,
+        { x: -600, y: 1600, sun: { mass: 1000, color: 0xff8800 },
           planets: [
             { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
           ]
         },
-        {
-          x: 1600, y: 1600,
+        { x: 1600, y: 1600, sun: { mass: 2500, color: 0xff6600 },
           planets: [
             { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
           ]
         }
       ];
 
-      for (const { x, y, planets: planetDefs } of solarSystemData) {
+      for (const { x, y, sun: sunDef, planets: planetDefs } of solarSystemData) {
         let totalPx = 0, totalPy = 0, totalMass = 0;
         for (const pd of planetDefs) {
           totalPx += pd.vx * pd.mass;
           totalPy += pd.vy * pd.mass;
           totalMass += pd.mass;
         }
-        const sunMass = 2000;
+        const sunMass = sunDef.mass;
         const sunVx = -totalPx / sunMass;
         const sunVy = -totalPy / sunMass;
 
-        const s = this.add.circle(x, y, 20, 0xffff00);
+        const sunRadius = Math.cbrt(sunDef.mass);
+        const s = this.add.circle(x, y, sunRadius, sunDef.color);
         s.vx = sunVx;
         s.vy = sunVy;
         this.physics.add.existing(s);
@@ -136,14 +134,15 @@
         s.mass = sunMass;
 
         const sl = this.add.text(x, y - 30, 'Sun', {
-          font: '16px Arial', fill: '#ffff00', align: 'center'
+          font: '16px Arial', fill: Phaser.Display.Color.IntegerToColor(sunDef.color).rgba, align: 'center'
         }).setOrigin(0.5);
 
         const planets = [];
         for (const pd of planetDefs) {
           const px = x + pd.offsetX;
           const py = y + pd.offsetY;
-          const p = this.add.circle(px, py, 16, pd.color);
+          const planetRadius = Math.cbrt(pd.mass);
+          const p = this.add.circle(px, py, planetRadius, pd.color);
           p.vx = pd.vx;
           p.vy = pd.vy;
           p.mass = pd.mass;
