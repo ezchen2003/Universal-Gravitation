@@ -73,44 +73,78 @@
       graphics = this.add.graphics();
       cursors = this.input.keyboard.createCursorKeys();
 
-      const baseSystems = [
-        { x: 400, y: 300 },
-        { x: -700, y: -700 },
-        { x: 1700, y: -700 },
-        { x: -700, y: 1700 },
-        { x: 1700, y: 1700 }
+      const solarSystemData = [
+        {
+          x: 400, y: 300,
+          planets: [
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff },
+            { offsetX: 0, offsetY: 250, vx: 1.5, vy: 0, mass: 100, color: 0x00ddaa }
+          ]
+        },
+        {
+          x: -600, y: -600,
+          planets: [
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+          ]
+        },
+        {
+          x: 1600, y: -600,
+          planets: [
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+          ]
+        },
+        {
+          x: -600, y: 1600,
+          planets: [
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+          ]
+        },
+        {
+          x: 1600, y: 1600,
+          planets: [
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+          ]
+        }
       ];
 
-      for (const { x, y } of baseSystems) {
-        // Set up solar system with zero total momentum
-        const planetMass = 100;
+      for (const { x, y, planets: planetDefs } of solarSystemData) {
+        let totalPx = 0, totalPy = 0, totalMass = 0;
+        for (const pd of planetDefs) {
+          totalPx += pd.vx * pd.mass;
+          totalPy += pd.vy * pd.mass;
+          totalMass += pd.mass;
+        }
         const sunMass = 2000;
-        const planetVx = 0;
-        const planetVy = -2.0;
-        const sunVx = -(planetMass / sunMass) * planetVx;
-        const sunVy = -(planetMass / sunMass) * planetVy;
+        const sunVx = -totalPx / sunMass;
+        const sunVy = -totalPy / sunMass;
+
         const s = this.add.circle(x, y, 20, 0xffff00);
         s.vx = sunVx;
         s.vy = sunVy;
         this.physics.add.existing(s);
         s.body.setCollideWorldBounds(true);
-        s.mass = 2000;
-
-        const p = this.add.circle(x + 200, y, 16, 0x00aaff);
-        p.vx = planetVx;
-        p.vy = planetVy;
-        p.mass = 100;
-        
+        s.mass = sunMass;
 
         const sl = this.add.text(x, y - 30, 'Sun', {
           font: '16px Arial', fill: '#ffff00', align: 'center'
         }).setOrigin(0.5);
 
-        const pl = this.add.text(p.x, p.y - 30, 'Planet', {
-          font: '16px Arial', fill: '#00aaff', align: 'center'
-        }).setOrigin(0.5);
+        const planets = [];
+        for (const pd of planetDefs) {
+          const px = x + pd.offsetX;
+          const py = y + pd.offsetY;
+          const p = this.add.circle(px, py, 16, pd.color);
+          p.vx = pd.vx;
+          p.vy = pd.vy;
+          p.mass = pd.mass;
+          const pl = this.add.text(px, py - 30, 'Planet', {
+            font: '16px Arial', fill: Phaser.Display.Color.IntegerToColor(pd.color).rgba, align: 'center'
+          }).setOrigin(0.5);
+          planets.push({ body: p, label: pl });
+        }
 
-        solarSystems.push({ sun: s, planet: p, sunLabel: sl, planetLabel: pl });
+        solarSystems.push({ sun: s, planets: planets, sunLabel: sl });
+      }
       }
 
       // Assign the central system to sun/planet for reference (e.g. trail)
@@ -142,8 +176,12 @@
       graphics.clear();
       drawGrid();
       for (const sys of solarSystems) {
-        applyGravity(sys.sun, sys.planet);
-        applyGravity(sys.planet, sys.sun);
+        for (const p of sys.planets) {
+          applyGravity(sys.sun, p.body);
+          applyGravity(p.body, sys.sun);
+          applyGravity(p.body, spaceship);
+          applyGravity(sys.sun, spaceship);
+        }
         applyGravity(sys.sun, spaceship);
         applyGravity(sys.planet, spaceship);
       }
@@ -157,8 +195,11 @@
       if (cursors.down.isDown) { spaceship.vy += thrust; flame = true; }
 
       for (const sys of solarSystems) {
-        sys.planet.x += sys.planet.vx;
-        sys.planet.y += sys.planet.vy;
+        for (const p of sys.planets) {
+          p.body.x += p.body.vx;
+          p.body.y += p.body.vy;
+          p.label.setPosition(p.body.x, p.body.y - 30);
+        }
         sys.sun.x += sys.sun.vx;
         sys.sun.y += sys.sun.vy;
         sys.planetLabel.setPosition(sys.planet.x, sys.planet.y - 30);
