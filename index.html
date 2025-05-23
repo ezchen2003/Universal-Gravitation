@@ -147,9 +147,7 @@
       }
       }
 
-      // Assign the central system to sun/planet for reference (e.g. trail)
-      ({ sun } = solarSystems[0]);
-      planet = solarSystems[0].planets[0].body;
+      
 
       spaceship = this.add.circle(300, 100, 10, 0xff00ff);
       spaceship.setInteractive();
@@ -158,6 +156,9 @@
       spaceship.mass = 0.5;
       spaceship.vx = 1.2;
       spaceship.vy = 0.5;
+
+      ({ sun } = solarSystems[0]);
+      planet = solarSystems[0].planets[0].body;
 
       this.cameras.main.startFollow(spaceship, true, 0.1, 0.1);
       this.cameras.main.setZoom(1);
