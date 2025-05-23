@@ -83,7 +83,11 @@
 
       for (const { x, y } of baseSystems) {
         const s = this.add.circle(x, y, 20, 0xffff00);
+        this.physics.add.existing(s);
+        s.body.setCollideWorldBounds(true);
         s.mass = 2000;
+        s.vx = 0;
+        s.vy = 0;
 
         const p = this.add.circle(x + 200, y, 16, 0x00aaff);
         p.mass = 100;
@@ -143,9 +147,9 @@
       drawGrid();
       for (const sys of solarSystems) {
         applyGravity(sys.sun, sys.planet);
+        applyGravity(sys.planet, sys.sun);
         applyGravity(sys.sun, spaceship);
         applyGravity(sys.planet, spaceship);
-        applyGravity(sys.planet, sys.sun);
       }
 
       // Player controls for spaceship thrust
@@ -158,6 +162,9 @@
 
       for (const sys of solarSystems) {
         sys.planet.x += sys.planet.vx;
+        sys.planet.y += sys.planet.vy;
+        sys.sun.x += sys.sun.vx;
+        sys.sun.y += sys.sun.vy;
         sys.planet.y += sys.planet.vy;
         sys.planetLabel.setPosition(sys.planet.x, sys.planet.y - 30);
       }
