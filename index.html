@@ -145,9 +145,9 @@
 
         solarSystems.push({ sun: s, planets: planets, sunLabel: sl });
       }
-      }
-
-      
+        // Assign the central system after creation
+      ({ sun } = solarSystems[0]);
+      planet = solarSystems[0].planets[0].body;
 
       spaceship = this.add.circle(300, 100, 10, 0xff00ff);
       spaceship.setInteractive();
@@ -157,13 +157,10 @@
       spaceship.vx = 1.2;
       spaceship.vy = 0.5;
 
-      ({ sun } = solarSystems[0]);
-      planet = solarSystems[0].planets[0].body;
-
       this.cameras.main.startFollow(spaceship, true, 0.1, 0.1);
       this.cameras.main.setZoom(1);
 
-                  spaceshipLabel = this.add.text(spaceship.x, spaceship.y - 30, 'Spaceship', {
+      spaceshipLabel = this.add.text(spaceship.x, spaceship.y - 30, 'Spaceship', {
         font: '16px Arial',
         fill: '#ff00ff',
         align: 'center'
