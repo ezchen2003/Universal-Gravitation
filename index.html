@@ -76,7 +76,10 @@
         if (spaceship.stuck) {
           const s = spaceship.stuck;
           const angle = s.angle;
-          const speed = 5.0;
+          const mass = s.target.mass || 1;
+          const radius = s.target.radius || 1;
+          const effectiveRadius = radius + spaceship.radius;
+          const speed = Math.sqrt(2 * G * mass / effectiveRadius);
           spaceship.stuck = null;
           spaceship.vx = Math.cos(angle) * speed;
           spaceship.vy = Math.sin(angle) * speed;
@@ -125,7 +128,7 @@
         const sunVx = -totalPx / sunMass;
         const sunVy = -totalPy / sunMass;
 
-        const sunRadius = Math.cbrt(sunDef.mass);
+        const sunRadius = 2*Math.cbrt(sunDef.mass);
         const s = this.add.circle(x, y, sunRadius, sunDef.color);
         s.vx = sunVx;
         s.vy = sunVy;
@@ -141,7 +144,7 @@
         for (const pd of planetDefs) {
           const px = x + pd.offsetX;
           const py = y + pd.offsetY;
-          const planetRadius = Math.cbrt(pd.mass);
+          const planetRadius = 3*Math.cbrt(pd.mass);
           const p = this.add.circle(px, py, planetRadius, pd.color);
           p.vx = pd.vx;
           p.vy = pd.vy;
