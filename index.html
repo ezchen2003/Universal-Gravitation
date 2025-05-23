@@ -221,20 +221,22 @@
           const dx = spaceship.x - sys.sun.x;
           const dy = spaceship.y - sys.sun.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 30) {
+          const sunRadius = sys.sun.radius || Math.cbrt(sys.sun.mass);
+          if (dist < sunRadius + spaceship.radius) {
             const angle = Math.atan2(dy, dx);
             spaceship.vx = spaceship.vy = 0;
-            spaceship.stuck = { target: sys.sun, angle: angle, radius: 30 };
+            spaceship.stuck = { target: sys.sun, angle: angle, radius: sunRadius + spaceship.radius };
             break;
           }
           for (const p of sys.planets) {
             const dxp = spaceship.x - p.body.x;
             const dyp = spaceship.y - p.body.y;
             const distp = Math.sqrt(dxp * dxp + dyp * dyp);
-            if (distp < 26) {
+            const planetRadius = p.body.radius || Math.cbrt(p.body.mass);
+            if (distp < planetRadius + spaceship.radius) {
               const angle = Math.atan2(dyp, dxp);
               spaceship.vx = spaceship.vy = 0;
-              spaceship.stuck = { target: p.body, angle: angle, radius: 26 };
+              spaceship.stuck = { target: p.body, angle: angle, radius: planetRadius + spaceship.radius };
               break;
             }
           }
