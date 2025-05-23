@@ -182,16 +182,17 @@
     }
 
     function update() {
+      const delta_t = 1;
       this.coordText.setText(`X: ${spaceship.x.toFixed(0)}, Y: ${spaceship.y.toFixed(0)}`);
       this.coordText.setPosition(10, 10);
       graphics.clear();
       drawGrid();
       for (const sys of solarSystems) {
         for (const p of sys.planets) {
-          applyGravity(sys.sun, p.body);
-          applyGravity(p.body, sys.sun);
-          applyGravity(p.body, spaceship);
-          applyGravity(sys.sun, spaceship);
+          applyGravity(sys.sun, p.body, delta_t);
+          applyGravity(p.body, sys.sun, delta_t);
+          applyGravity(p.body, spaceship, delta_t);
+          applyGravity(sys.sun, spaceship, delta_t);
         }
         
       }
@@ -206,17 +207,17 @@
 
       for (const sys of solarSystems) {
         for (const p of sys.planets) {
-          p.body.x += p.body.vx;
-          p.body.y += p.body.vy;
+          p.body.x += delta_t * p.body.vx;
+          p.body.y += delta_t * p.body.vy;
           p.label.setPosition(p.body.x, p.body.y - 30);
         }
-        sys.sun.x += sys.sun.vx;
-        sys.sun.y += sys.sun.vy;
+        sys.sun.x += delta_t * sys.sun.vx;
+        sys.sun.y += delta_t * sys.sun.vy;
                 sys.sunLabel.setPosition(sys.sun.x, sys.sun.y - 30);
       }
 
-      spaceship.x += spaceship.vx;
-      spaceship.y += spaceship.vy;
+      spaceship.x += delta_t * spaceship.vx;
+      spaceship.y += delta_t * spaceship.vy;
 
       // Collision check with sun and planets
       if (!spaceship.stuck) {
@@ -269,7 +270,7 @@
       drawTrail();
     }
 
-    function applyGravity(bodyA, bodyB) {
+    function applyGravity(bodyA, bodyB, delta_t) {
       const dx = bodyA.x - bodyB.x;
       const dy = bodyA.y - bodyB.y;
       const distSq = dx * dx + dy * dy;
@@ -278,8 +279,8 @@
       const force = (G * bodyA.mass * bodyB.mass) / distSq;
       const ax = force * dx / dist / bodyB.mass;
       const ay = force * dy / dist / bodyB.mass;
-      bodyB.vx += ax;
-      bodyB.vy += ay;
+      bodyB.vx += delta_t * ax;
+      bodyB.vy += delta_t * ay;
     }
 
     function drawGrid() {
