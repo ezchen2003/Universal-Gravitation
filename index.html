@@ -72,6 +72,16 @@
 
       graphics = this.add.graphics();
       cursors = this.input.keyboard.createCursorKeys();
+      this.input.keyboard.on('keydown-R', () => {
+        if (spaceship.stuck) {
+          const s = spaceship.stuck;
+          const angle = s.angle;
+          const speed = 2.0;
+          spaceship.stuck = null;
+          spaceship.vx = Math.cos(angle) * speed;
+          spaceship.vy = Math.sin(angle) * speed;
+        }
+      });
 
       const solarSystemData = [
         {
