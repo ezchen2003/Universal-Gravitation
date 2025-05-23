@@ -127,19 +127,7 @@
       this.cameras.main.startFollow(spaceship, true, 0.1, 0.1);
       this.cameras.main.setZoom(1);
 
-      sunLabel = this.add.text(sun.x, sun.y - 30, 'Sun', {
-        font: '16px Arial',
-        fill: '#ffff00',
-        align: 'center'
-      }).setOrigin(0.5);
-
-      planetLabel = this.add.text(planet.x, planet.y - 30, 'Planet', {
-        font: '16px Arial',
-        fill: '#00aaff',
-        align: 'center'
-      }).setOrigin(0.5);
-
-      spaceshipLabel = this.add.text(spaceship.x, spaceship.y - 30, 'Spaceship', {
+                  spaceshipLabel = this.add.text(spaceship.x, spaceship.y - 30, 'Spaceship', {
         font: '16px Arial',
         fill: '#ff00ff',
         align: 'center'
@@ -180,8 +168,7 @@
       spaceship.x += spaceship.vx;
       spaceship.y += spaceship.vy;
 
-      planetLabel.setPosition(planet.x, planet.y - 30);
-      spaceshipLabel.setPosition(spaceship.x, spaceship.y - 30);
+            spaceshipLabel.setPosition(spaceship.x, spaceship.y - 30);
 
       // Draw flame trail
       if (flame) {
