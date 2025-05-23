@@ -207,30 +207,36 @@
       spaceship.y += spaceship.vy;
 
       // Collision check with sun and planets
-      for (const sys of solarSystems) {
-        const dx = spaceship.x - sys.sun.x;
-        const dy = spaceship.y - sys.sun.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 30) {
-          const angle = Math.atan2(dy, dx);
-          spaceship.vx = spaceship.vy = 0;
-          spaceship.x = sys.sun.x + Math.cos(angle) * 30;
-          spaceship.y = sys.sun.y + Math.sin(angle) * 30;
-        }
-        for (const p of sys.planets) {
-          const dxp = spaceship.x - p.body.x;
-          const dyp = spaceship.y - p.body.y;
-          const distp = Math.sqrt(dxp * dxp + dyp * dyp);
-          if (distp < 26) {
-            const angle = Math.atan2(dyp, dxp);
+      if (!spaceship.stuck) {
+        for (const sys of solarSystems) {
+          const dx = spaceship.x - sys.sun.x;
+          const dy = spaceship.y - sys.sun.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 30) {
+            const angle = Math.atan2(dy, dx);
             spaceship.vx = spaceship.vy = 0;
-            spaceship.x = p.body.x + Math.cos(angle) * 26;
-            spaceship.y = p.body.y + Math.sin(angle) * 26;
+            spaceship.stuck = { target: sys.sun, angle: angle, radius: 30 };
+            break;
+          }
+          for (const p of sys.planets) {
+            const dxp = spaceship.x - p.body.x;
+            const dyp = spaceship.y - p.body.y;
+            const distp = Math.sqrt(dxp * dxp + dyp * dyp);
+            if (distp < 26) {
+              const angle = Math.atan2(dyp, dxp);
+              spaceship.vx = spaceship.vy = 0;
+              spaceship.stuck = { target: p.body, angle: angle, radius: 26 };
+              break;
+            }
           }
         }
+      } else {
+        const s = spaceship.stuck;
+        spaceship.x = s.target.x + Math.cos(s.angle) * s.radius;
+        spaceship.y = s.target.y + Math.sin(s.angle) * s.radius;
       }
 
-            spaceshipLabel.setPosition(spaceship.x, spaceship.y - 30);
+      spaceshipLabel.setPosition(spaceship.x, spaceship.y - 30);
 
       // Draw flame trail
       if (flame) {
