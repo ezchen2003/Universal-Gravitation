@@ -97,7 +97,7 @@
           const angle = s.angle;
           const mass = s.target.mass || 1;
           const radius = s.target.radius || 1;
-          const effectiveRadius = radius + 0 * spaceship.radius;
+          const effectiveRadius = radius + spaceship.radius;
           const speed = Math.sqrt(2 * G * mass / effectiveRadius);
           spaceship.stuck = null;
           spaceship.vx = s.target.vx + Math.cos(angle) * speed;
