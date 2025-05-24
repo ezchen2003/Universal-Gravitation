@@ -299,13 +299,25 @@
 
       // Draw flame trail
       if (flame) {
-        graphics.fillStyle(0xff6600, 1);
-        graphics.beginPath();
-        graphics.moveTo(spaceship.x, spaceship.y);
-        graphics.lineTo(spaceship.x - spaceship.vx * 8 + 4, spaceship.y - spaceship.vy * 8 + 4);
-        graphics.lineTo(spaceship.x - spaceship.vx * 8 - 4, spaceship.y - spaceship.vy * 8 - 4);
-        graphics.closePath();
-        graphics.fillPath();
+        let fx = 0;
+        let fy = 0;
+        if (cursors.left.isDown) { fx += 1; }
+        if (cursors.right.isDown) { fx -= 1; }
+        if (cursors.up.isDown) { fy += 1; }
+        if (cursors.down.isDown) { fy -= 1; }
+        const len = Math.hypot(fx, fy);
+        if (len > 0) {
+          fx /= len;
+          fy /= len;
+          graphics.fillStyle(0xff6600, 1);
+          graphics.beginPath();
+          graphics.moveTo(spaceship.x, spaceship.y);
+          graphics.lineTo(spaceship.x + fx * 10 + 4, spaceship.y + fy * 10 + 4);
+          graphics.lineTo(spaceship.x + fx * 10 - 4, spaceship.y + fy * 10 - 4);
+          graphics.closePath();
+          graphics.fillPath();
+        }
+      }
       }
 
       trail.push({ x: planet.x, y: planet.y });
