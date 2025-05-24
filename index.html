@@ -210,11 +210,11 @@
       graphics.clear();
       drawGrid();
       for (const sys of solarSystems) {
-        applyGravity(sys.sun, p.body, delta_t);
+        applyGravity(sys.sun, spaceship, delta_t);
         for (const p of sys.planets) {
+          applyGravity(sys.sun, p.body, delta_t);
           applyGravity(p.body, sys.sun, delta_t);
           applyGravity(p.body, spaceship, delta_t);
-          applyGravity(sys.sun, spaceship, delta_t);
         }
         
       }
