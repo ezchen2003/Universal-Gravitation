@@ -182,7 +182,7 @@
     }
 
     function update() {
-      const delta_t = 0.1;
+      const delta_t = 1;
       this.coordText.setText(`X: ${spaceship.x.toFixed(0)}, Y: ${spaceship.y.toFixed(0)}`);
       this.coordText.setPosition(10, 10);
       graphics.clear();
@@ -200,10 +200,10 @@
       // Player controls for spaceship thrust
       const thrust = 0.05;
       let flame = false;
-            if (cursors.left.isDown) { spaceship.vx -= thrust; flame = true; }
-      if (cursors.right.isDown) { spaceship.vx += thrust; flame = true; }
-      if (cursors.up.isDown) { spaceship.vy -= thrust; flame = true; }
-      if (cursors.down.isDown) { spaceship.vy += thrust; flame = true; }
+            if (cursors.left.isDown) { spaceship.vx -= delta_t * thrust; flame = true; }
+      if (cursors.right.isDown) { spaceship.vx += delta_t * thrust; flame = true; }
+      if (cursors.up.isDown) { spaceship.vy -= delta_t * thrust; flame = true; }
+      if (cursors.down.isDown) { spaceship.vy += delta_t * thrust; flame = true; }
 
       for (const sys of solarSystems) {
         for (const p of sys.planets) {
