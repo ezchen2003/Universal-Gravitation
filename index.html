@@ -69,8 +69,8 @@
           this.bullets.add(bullet);
         }
       });
-      const worldSize = 3000;
-      const worldOrigin = -1000;
+      const worldSize = 4000;
+      const worldOrigin = -(worldSize/2 - 500);
       const minimapSize = 150;
       this.minimap = this.cameras.add(600, 10, minimapSize, minimapSize).setZoom(minimapSize/worldSize).setName('mini');
       this.minimap.setBackgroundColor(0x000000);
