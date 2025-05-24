@@ -74,18 +74,18 @@
       const minimapSize = 150;
       this.minimap = this.cameras.add(600, 10, minimapSize, minimapSize).setZoom(minimapSize/worldSize).setName('mini');
       this.minimap.setBackgroundColor(0x000000);
-      this.minimap.setBounds(-1000, -1000, 3000, 3000);
-      this.minimap.scrollX = -1000;
-      this.minimap.scrollY = -1000;
+      this.minimap.setBounds(worldOrigin, worldOrigin, worldSize, worldSize);
+      this.minimap.scrollX = worldOrigin;
+      this.minimap.scrollY = worldOrigin;
       // Add quadrant objects and border visual
-      const border = this.add.rectangle(500, 500, 3000, 3000).setStrokeStyle(4, 0xffffff, 0.5);
+      const border = this.add.rectangle(500, 500, worldSize-5, worldSize-5).setStrokeStyle(4, 0xffffff, 0.5);
       border.setOrigin(0);
-      border.setPosition(-1000, -1000);
+      border.setPosition(worldOrigin, worldOrigin);
 
-      this.add.text(-900, -900, 'Top-Left', { font: '16px Arial', fill: '#aaa' });
-      this.add.text(1800, -900, 'Top-Right', { font: '16px Arial', fill: '#aaa' });
-      this.add.text(-900, 1800, 'Bottom-Left', { font: '16px Arial', fill: '#aaa' });
-      this.add.text(1800, 1800, 'Bottom-Right', { font: '16px Arial', fill: '#aaa' });
+      //this.add.text(-900, -900, 'Top-Left', { font: '16px Arial', fill: '#aaa' });
+      //this.add.text(1800, -900, 'Top-Right', { font: '16px Arial', fill: '#aaa' });
+      //this.add.text(-900, 1800, 'Bottom-Left', { font: '16px Arial', fill: '#aaa' });
+      //this.add.text(1800, 1800, 'Bottom-Right', { font: '16px Arial', fill: '#aaa' });
 
       this.coordText = this.add.text(0, 0, '', { font: '14px Courier', fill: '#ffffff' }).setScrollFactor(0);
       
