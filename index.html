@@ -100,8 +100,8 @@
           const effectiveRadius = radius + 0 * spaceship.radius;
           const speed = Math.sqrt(2 * G * mass / effectiveRadius);
           spaceship.stuck = null;
-          spaceship.vx = Math.cos(angle) * speed;
-          spaceship.vy = Math.sin(angle) * speed;
+          spaceship.vx = s.target.vx + Math.cos(angle) * speed;
+          spaceship.vy = s.target.vy + Math.sin(angle) * speed;
         }
       });
 
@@ -208,11 +208,11 @@
       graphics.clear();
       drawGrid();
       for (const sys of solarSystems) {
+        applyGravity(sys.sun, spaceship, delta_t);
         for (const p of sys.planets) {
           applyGravity(sys.sun, p.body, delta_t);
           applyGravity(p.body, sys.sun, delta_t);
           applyGravity(p.body, spaceship, delta_t);
-          applyGravity(sys.sun, spaceship, delta_t);
         }
         
       }
