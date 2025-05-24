@@ -203,7 +203,29 @@
     }
 
     function update() {
-      this.bullets.children.each(bullet => bullet.update(), this);
+      this.bullets.children.each(bullet => {
+        bullet.update();
+        for (const sys of solarSystems) {
+          const dx = bullet.x - sys.sun.x;
+          const dy = bullet.y - sys.sun.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const sunRadius = sys.sun.radius || Math.cbrt(sys.sun.mass);
+          if (dist < sunRadius) {
+            bullet.destroy();
+            return;
+          }
+          for (const p of sys.planets) {
+            const dxp = bullet.x - p.body.x;
+            const dyp = bullet.y - p.body.y;
+            const distp = Math.sqrt(dxp * dxp + dyp * dyp);
+            const planetRadius = p.body.radius || Math.cbrt(p.body.mass);
+            if (distp < planetRadius) {
+              bullet.destroy();
+              return;
+            }
+          }
+        }
+      }, this);
       const delta_t = 1;
       this.coordText.setText(`X: ${spaceship.x.toFixed(0)}, Y: ${spaceship.y.toFixed(0)}`);
       this.coordText.setPosition(10, 10);
