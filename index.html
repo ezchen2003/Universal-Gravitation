@@ -3,19 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Universal Gravitation with Phaser</title>
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js">function createExplosion(x, y) {
-  const explosion = this.add.particles(x, y, 'explosion', {
-    speed: { min: -100, max: 100 },
-    angle: { min: 0, max: 360 },
-    lifespan: 300,
-    quantity: 10,
-    scale: { start: 0.5, end: 0 },
-    tint: 0xffaa00
-  });
-  setTimeout(() => explosion.destroy(), 300);
-}
-
-$1
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -57,13 +45,7 @@ $1
 
     const game = new Phaser.Game(config);
 
-    function preload() {
-      this.textures.generate('explosion', {
-        data: ['.'],
-        pixelWidth: 2,
-        pixelHeight: 2
-      });
-    }
+    function preload() {}
 
     function create() {
       this.bullets = this.physics.add.group({ defaultKey: 'bullet', runChildUpdate: true });
@@ -229,7 +211,6 @@ $1
           const dist = Math.sqrt(dx * dx + dy * dy);
           const sunRadius = sys.sun.radius || Math.cbrt(sys.sun.mass);
           if (dist < sunRadius) {
-            createExplosion.call(this, bullet.x, bullet.y);
             bullet.destroy();
             return;
           }
@@ -239,7 +220,6 @@ $1
             const distp = Math.sqrt(dxp * dxp + dyp * dyp);
             const planetRadius = p.body.radius || Math.cbrt(p.body.mass);
             if (distp < planetRadius) {
-              createExplosion.call(this, bullet.x, bullet.y);
               bullet.destroy();
               return;
             }
