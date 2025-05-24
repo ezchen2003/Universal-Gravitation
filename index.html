@@ -45,7 +45,9 @@
 
     const game = new Phaser.Game(config);
 
-    function preload() {}
+    function preload() {
+      this.textures.generate('bullet', { data: ['.'], pixelWidth: 2, pixelHeight: 2 });
+    }
 
     function create() {
       this.bullets = this.physics.add.group({ defaultKey: 'bullet', runChildUpdate: true });
@@ -203,7 +205,7 @@
     }
 
     function update() {
-      this.bullets.children.each(bullet => {
+      if (this.bullets) this.bullets.children.each(bullet => {
         bullet.update();
         for (const sys of solarSystems) {
           const dx = bullet.x - sys.sun.x;
