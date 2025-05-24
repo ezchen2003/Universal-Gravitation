@@ -51,12 +51,14 @@
       this.bullets = this.physics.add.group({ defaultKey: 'bullet', runChildUpdate: true });
       this.input.keyboard.on('keydown-SPACE', () => {
         if (!spaceship.stuck) {
+          const worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
+          const angle = Math.atan2(worldPoint.y - spaceship.y, worldPoint.x - spaceship.x);
           const bullet = this.add.circle(spaceship.x, spaceship.y, 3, 0xffffff);
           this.physics.add.existing(bullet);
           bullet.body.setCollideWorldBounds(false);
           bullet.body.allowGravity = false;
-          bullet.vx = spaceship.vx + Math.cos(Math.atan2(spaceship.vy, spaceship.vx)) * 10;
-          bullet.vy = spaceship.vy + Math.sin(Math.atan2(spaceship.vy, spaceship.vx)) * 10;
+          bullet.vx = Math.cos(angle) * 10;
+          bullet.vy = Math.sin(angle) * 10;
           bullet.update = function () {
             bullet.x += bullet.vx;
             bullet.y += bullet.vy;
@@ -208,11 +210,11 @@
       graphics.clear();
       drawGrid();
       for (const sys of solarSystems) {
-        applyGravity(sys.sun, spaceship, delta_t);
+        applyGravity(sys.sun, p.body, delta_t);
         for (const p of sys.planets) {
-          applyGravity(sys.sun, p.body, delta_t);
           applyGravity(p.body, sys.sun, delta_t);
           applyGravity(p.body, spaceship, delta_t);
+          applyGravity(sys.sun, spaceship, delta_t);
         }
         
       }
