@@ -48,6 +48,25 @@
     function preload() {}
 
     function create() {
+      this.bullets = this.physics.add.group({ defaultKey: 'bullet', runChildUpdate: true });
+      this.input.keyboard.on('keydown-SPACE', () => {
+        if (!spaceship.stuck) {
+          const bullet = this.add.circle(spaceship.x, spaceship.y, 3, 0xffffff);
+          this.physics.add.existing(bullet);
+          bullet.body.setCollideWorldBounds(false);
+          bullet.body.allowGravity = false;
+          bullet.vx = spaceship.vx + Math.cos(Math.atan2(spaceship.vy, spaceship.vx)) * 10;
+          bullet.vy = spaceship.vy + Math.sin(Math.atan2(spaceship.vy, spaceship.vx)) * 10;
+          bullet.update = function () {
+            bullet.x += bullet.vx;
+            bullet.y += bullet.vy;
+            if (Math.abs(bullet.x - spaceship.x) > 1000 || Math.abs(bullet.y - spaceship.y) > 1000) {
+              bullet.destroy();
+            }
+          };
+          this.bullets.add(bullet);
+        }
+      });
       this.minimap = this.cameras.add(600, 10, 150, 150).setZoom(0.05).setName('mini');
       this.minimap.setBackgroundColor(0x000000);
       this.minimap.setBounds(-1000, -1000, 3000, 3000);
@@ -78,7 +97,7 @@
           const angle = s.angle;
           const mass = s.target.mass || 1;
           const radius = s.target.radius || 1;
-          const effectiveRadius = radius + spaceship.radius;
+          const effectiveRadius = radius + 0 * spaceship.radius;
           const speed = Math.sqrt(2 * G * mass / effectiveRadius);
           spaceship.stuck = null;
           spaceship.vx = Math.cos(angle) * speed;
@@ -182,7 +201,8 @@
     }
 
     function update() {
-      const delta_t = 0.1;
+      this.bullets.children.each(bullet => bullet.update(), this);
+      const delta_t = 1;
       this.coordText.setText(`X: ${spaceship.x.toFixed(0)}, Y: ${spaceship.y.toFixed(0)}`);
       this.coordText.setPosition(10, 10);
       graphics.clear();
