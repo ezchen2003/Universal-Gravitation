@@ -323,8 +323,8 @@
           graphics.fillStyle(0xff6600, 1);
           graphics.beginPath();
           graphics.moveTo(spaceship.x, spaceship.y);
-          graphics.lineTo(spaceship.x + fx * 10 + 4, spaceship.y + fy * 10 + 4);
-          graphics.lineTo(spaceship.x + fx * 10 - 4, spaceship.y + fy * 10 - 4);
+          graphics.lineTo(spaceship.x + fx * 10 + fy * 4, spaceship.y + fy * 10 - fx * 4);
+          graphics.lineTo(spaceship.x + fx * 10 - fy * 4, spaceship.y + fy * 10 + fx * 4);
           graphics.closePath();
           graphics.fillPath();
         }
