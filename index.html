@@ -69,7 +69,10 @@
           this.bullets.add(bullet);
         }
       });
-      this.minimap = this.cameras.add(600, 10, 150, 150).setZoom(0.05).setName('mini');
+      const worldSize = 3000;
+      const worldOrigin = -1000;
+      const minimapSize = 150;
+      this.minimap = this.cameras.add(600, 10, minimapSize, minimapSize).setZoom(minimapSize/worldSize).setName('mini');
       this.minimap.setBackgroundColor(0x000000);
       this.minimap.setBounds(-1000, -1000, 3000, 3000);
       this.minimap.scrollX = -1000;
@@ -85,9 +88,7 @@
       this.add.text(1800, 1800, 'Bottom-Right', { font: '16px Arial', fill: '#aaa' });
 
       this.coordText = this.add.text(0, 0, '', { font: '14px Courier', fill: '#ffffff' }).setScrollFactor(0);
-
-      const worldSize = 3000;
-      const worldOrigin = -1000;
+      
       this.cameras.main.setBounds(worldOrigin, worldOrigin, worldSize, worldSize);
       this.physics.world.setBounds(worldOrigin, worldOrigin, worldSize, worldSize);
 
