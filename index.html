@@ -57,7 +57,13 @@ $1
 
     const game = new Phaser.Game(config);
 
-    function preload() {}
+    function preload() {
+      this.textures.generate('explosion', {
+        data: ['.'],
+        pixelWidth: 2,
+        pixelHeight: 2
+      });
+    }
 
     function create() {
       this.bullets = this.physics.add.group({ defaultKey: 'bullet', runChildUpdate: true });
