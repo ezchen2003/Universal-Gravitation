@@ -309,6 +309,8 @@
         if (len > 0) {
           fx /= len;
           fy /= len;
+          fx *= 4;
+          fy *= 4;
           graphics.fillStyle(0xff6600, 1);
           graphics.beginPath();
           graphics.moveTo(spaceship.x, spaceship.y);
