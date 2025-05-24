@@ -4,17 +4,18 @@
   <meta charset="UTF-8" />
   <title>Universal Gravitation with Phaser</title>
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js">function createExplosion(x, y) {
-      const explosion = this.add.particles(x, y, 'explosion', {
-        speed: { min: -100, max: 100 },
-        angle: { min: 0, max: 360 },
-        lifespan: 300,
-        quantity: 10,
-        scale: { start: 0.5, end: 0 },
-        tint: 0xffaa00
-      });
-      setTimeout(() => explosion.destroy(), 300);
-    }
-  </script>
+  const explosion = this.add.particles(x, y, 'explosion', {
+    speed: { min: -100, max: 100 },
+    angle: { min: 0, max: 360 },
+    lifespan: 300,
+    quantity: 10,
+    scale: { start: 0.5, end: 0 },
+    tint: 0xffaa00
+  });
+  setTimeout(() => explosion.destroy(), 300);
+}
+
+$1
   <style>
     body {
       margin: 0;
