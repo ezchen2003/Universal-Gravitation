@@ -263,6 +263,15 @@
       spaceship.x += delta_t * spaceship.vx;
       spaceship.y += delta_t * spaceship.vy;
 
+      // Reflect velocity at world bounds
+      const bounds = this.physics.world.bounds;
+      if (spaceship.x <= bounds.x || spaceship.x >= bounds.x + bounds.width) {
+        spaceship.vx = 0;
+      }
+      if (spaceship.y <= bounds.y || spaceship.y >= bounds.y + bounds.height) {
+        spaceship.vy = 0;
+      }
+
       // Collision check with sun and planets
       if (!spaceship.stuck) {
         for (const sys of solarSystems) {
