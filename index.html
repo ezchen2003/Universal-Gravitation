@@ -318,13 +318,11 @@
         if (len > 0) {
           fx /= len;
           fy /= len;
-          fx *= 4;
-          fy *= 4;
           graphics.fillStyle(0xff6600, 1);
           graphics.beginPath();
           graphics.moveTo(spaceship.x, spaceship.y);
-          graphics.lineTo(spaceship.x + fx * 10 + fy * 4, spaceship.y + fy * 10 - fx * 4);
-          graphics.lineTo(spaceship.x + fx * 10 - fy * 4, spaceship.y + fy * 10 + fx * 4);
+          graphics.lineTo(spaceship.x + fx * 40 + fy * 4, spaceship.y + fy * 40 - fx * 4);
+          graphics.lineTo(spaceship.x + fx * 40 - fy * 4, spaceship.y + fy * 40 + fx * 4);
           graphics.closePath();
           graphics.fillPath();
         }
