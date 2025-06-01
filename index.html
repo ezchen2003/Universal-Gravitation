@@ -35,7 +35,7 @@
       }
     };
 
-    const G = 3e-1;
+    const G = 1.2;
     let sun, planet, spaceship;
     let solarSystems = [];
     let trail = [];
@@ -113,28 +113,28 @@
           x: 400, y: 300,
           sun: { mass: 2000, color: 0xffff00 },
           planets: [
-            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff },
-            { offsetX: 0, offsetY: 250, vx: 1.5, vy: 0, mass: 100, color: 0x00ddaa }
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -4.0, mass: 100, color: 0x00aaff },
+            { offsetX: 0, offsetY: 250, vx: 3, vy: 0, mass: 100, color: 0x00ddaa }
           ]
         },
         { x: -600, y: -600, sun: { mass: 2500, color: 0xffcc00 },
           planets: [
-            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -4.0, mass: 100, color: 0x00aaff }
           ]
         },
         { x: 1600, y: -600, sun: { mass: 1800, color: 0xffaa00 },
           planets: [
-            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -4.0, mass: 100, color: 0x00aaff }
           ]
         },
         { x: -600, y: 1600, sun: { mass: 2000, color: 0xff8800 },
           planets: [
-            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -4.0, mass: 100, color: 0x00aaff }
           ]
         },
         { x: 1600, y: 1600, sun: { mass: 2500, color: 0xff6600 },
           planets: [
-            { offsetX: 200, offsetY: 0, vx: 0, vy: -2.0, mass: 100, color: 0x00aaff }
+            { offsetX: 200, offsetY: 0, vx: 0, vy: -4.0, mass: 100, color: 0x00aaff }
           ]
         }
       ];
@@ -188,8 +188,8 @@
       this.physics.add.existing(spaceship);
       spaceship.body.setCollideWorldBounds(true);
       spaceship.mass = 0.5;
-      spaceship.vx = 1.2;
-      spaceship.vy = 0.5;
+      spaceship.vx = 2.4;
+      spaceship.vy = 1.0;
 
       this.cameras.main.startFollow(spaceship, true, 0.1, 0.1);
       this.cameras.main.setZoom(1);
